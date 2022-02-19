@@ -1,0 +1,129 @@
+{% load static %}
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<link rel="icon" type="image/svg+xml" href="{% static 'landing/images/app-promo/uth-logo-small.svg' %}">
+		<title>Academic Authorization · Uth Groups</title>
+		<meta name="description" content="Μια πλατφόρμα αλληλοδιδασκαλίας μεταξύ φοιτητών">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+		<link rel="stylesheet" href="{% static 'landing/css/shards.min.css'%}">
+		<link rel="stylesheet" href="{% static 'landing/css/shards-extras.min.css'%}">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+		<style>
+			*{font-family: 'Roboto Slab', serif;}
+		</style>
+	</head>
+	<body class="shards-app-promo-page--1">
+		<style>
+			*{font-family: 'Roboto Slab', serif;}
+			.hideLoad{display:None;}
+			.hideLoad2{display:None;}
+		</style>
+		<!-- Welcome Section -->
+		<div class="welcome d-flex justify-content-center flex-column "style="height:100%">
+			<div class="container">
+				<!-- Navigation -->
+				<nav class="navbar navbar-expand-lg navbar-dark pt-4 px-0">
+					<a class="navbar-brand mr-5" href='{% url "home" %}' style="font-family: 'Roboto Slab', serif;">
+					<img src="{% static 'landing/images/app-promo/uth-logo-small.svg'%}" class="mr-0" alt="UTH Groups - Landing Page">
+					UTH GROUPS
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarNavDropdown">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item">
+								<form method="post" action="{% url 'backAcademicAuthorization' %}">
+									{% csrf_token %}
+									<button type="submit" class="btn btn-link" style="color:white;" class="nav-link"><b>Πίσω</b></button>
+								</form>
+							</li>
+							<li class="nav-item">
+							<form method="post" action="{% url 'cancelAcademicAuthorization' %}">
+								{% csrf_token %}
+								<button type="submit" class="btn btn-link"style="color:white;" class="nav-link"><b>Ακύρωση</b></button>
+							</form>
+							</li>
+						</ul>
+					</div>
+				</nav>
+				<!-- / Navigation -->
+			</div>
+			<!-- .container -->
+			<style>
+				*{font-family: 'Roboto Slab', serif;}
+			</style>
+			<!-- Inner Wrapper -->
+			<div class="inner-wrapper mt-auto mb-auto container">
+				<div class="row">
+					<div class="col-lg-12 col-md-10 col-sm-6 mt-auto mb-auto" >
+						<h4 class="text-white text-center" style="font-family: 'Roboto Slab', serif;">Συμπληρώστε τον κωδικό που λάβατε στο ακαδημαϊκό email σας παρακάτω.</h4>
+						<form id="academicAuth" method='post' action="{% url 'academicAuthorization' %}" enctype="multipart/form-data">
+							{% csrf_token %}
+							<div class="d-flex justify-content-center">
+								<div class="col-lg-6 input-group mb-3">
+									<input type="text" class="form-control" style="font-family: 'Roboto Slab', serif;" name="code" placeholder="Κωδικός" aria-label="Κωδικός" required>
+								</div>
+								
+							</div>
+							<div class="d-flex justify-content-center">
+								<button type="button " class="btn btn-sm btn-light">Υποβολή </button>
+							</div>
+						</form>
+						<div id="loading" class="hideLoad" role="status">
+							<div class"row">
+								<div class="d-flex justify-content-center">			
+									<div class="spinner-grow text-light"></div>		
+									<p class="text-center" style="color:white;"><b> Έλεγχος OTP<br> Παρακαλώ περιμένετε </b></p>
+								</div>
+							</div>
+						</div>
+						<div id="showerror" class="hideLoad2" role="status">
+							<div class"row">
+								<div class="d-flex justify-content-center">			
+									<p class="text-center" style="color:white;"><b>❌ Η υπηρεσία ταυτοποίησης του GRNET δεν ειναι διαθέσιμη.<br>Δοκιμάστε ξανά αργότερα </b></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- / Inner Wrapper -->
+		</div>
+		<!-- / Welcome Section -->
+		</div>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	</body>
+	<script>
+		$(document).ready(function() {
+			$('#academicAuth').submit(function() {
+			$("#loading").toggleClass("hideLoad");
+				var data = new FormData(document.getElementById("academicAuth"));
+				$.ajax({
+					data: data,
+					type: $(this).attr('method'),
+					url: $(this).attr('action'),
+					cache: false,
+					processData: false,
+					contentType: false,
+					success: function(data) {
+						location.reload();
+					},
+					  error: function(err) {
+						$('#loading').hide();
+						$("#showerror").toggleClass("hideLoad2");
+					}
+				});
+				return false;
+			});
+		});
+	</script>
+</html>

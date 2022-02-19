@@ -1,0 +1,73 @@
+{% extends 'uth_groups_app/authenticated/authed_main.html' %}
+{%load static%}
+{% block head %}
+<title>
+	Προφίλ · Uth Groups
+</title>
+{% endblock %}
+{% load account %}
+{% block selected_tab %}
+<ul class="nav">
+	<li>
+		<a href={% url 'dashboard' %}>
+		<i class="fas fa-users"></i>
+		<p>Οι Ομαδες μου</p>
+		</a>
+	</li>
+	<li>
+		<a href={% url 'add' %}>
+		<i class="fas fa-plus-circle"></i>
+		<p>Νεα ομαδα</p>
+		</a>
+	</li>
+    <li>
+		<a href={% url 'calendar' %}>
+		<i class="far fa-calendar-alt"></i>
+		<p>Ημερολoγιο</p>
+		</a>
+	</li>
+	<li class="active" >
+		<a href={% url 'profile' %}>
+		<i class="far fa-user-circle"></i>
+		<p>Προφιλ</p>
+		</a>
+	</li>
+</ul>
+{% endblock  %}
+{% block page_title %}
+<a class="navbar-brand">Προφίλ</a>  
+{% endblock %}
+{% block content %}
+<div class="content">
+	<div class="row">
+		<div class="col-md-12">
+            <div class="card card-user">
+              <div class="image">
+                <img src="{% static 'landing/images/app-promo/profilecover.png' %}">
+              </div>
+              <div class="card-body">
+                <div class="author">
+                    <img class="avatar border-gray" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="...">
+                    <h5 style="color:black;"class="title">{{current_student}}</h5>
+                </div>
+                <p class="description text-center">
+                    Ακαδημαϊκο μέλος ✔️
+                </p>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="button-container">
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6 col-6 ml-auto">
+                      <h5><u>Gmail</u><br><small>{{user.email}}</small></h5>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-6 ml-auto mr-auto">
+                      <h5><u>Ακαδημαϊκο email</u><br><small>{{current_student.academic_email}}</small></h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+	</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,147 @@
+{% extends 'uth_groups_app/authenticated/authed_main.html' %}
+{%load static%}
+{% block head %}
+<title>
+	Δημιουργία και συμμετοχή σε ομάδα · Uth Groups
+</title>
+{% endblock %}
+{% load account %}
+{% block selected_tab %}
+<style>
+.hideLoadSettings{
+display:None;
+}
+</style>
+<ul class="nav">
+	<li>
+		<a href={% url 'dashboard' %}>
+		<i class="fas fa-users"></i>
+		<p>Οι Ομαδες μου</p>
+		</a>
+	</li>
+	<li class="active">
+		<a href={% url 'add' %}>
+		<i class="fas fa-plus-circle"></i>
+		<p>Νεα ομαδα</p>
+		</a>
+	</li>
+	<li>
+		<a href={% url 'calendar' %}>
+		<i class="far fa-calendar-alt"></i>
+		<p>Ημερολoγιο</p>
+		</a>
+	</li>
+	<li >
+		<a href={% url 'profile' %}>
+		<i class="far fa-user-circle"></i>
+		<p>Προφιλ</p>
+		</a>
+	</li>
+</ul>
+{% endblock  %}
+{% block page_title %}
+<a class="navbar-brand" >Δημιουργία και συμμετοχή σε ομάδα</a>  
+{% endblock %}
+{% block content %}
+<div class="content">
+<div class="row">
+	<div class="col-lg-6 col-md-6 col-sm-12">
+		<div class="card card-stats">
+			<div class="card-body ">
+				<div class="row">
+					<div class="col-5 col-md-4">
+						<div class="icon-big text-center icon-warning">
+							<i class="fas fa-user-plus" style="color: #d03636;"></i>
+						</div>
+					</div>
+					<div class="col-7 col-md-8">
+						<div class="numbers">
+							<p class="card-title text-secondary">Δημιουργήστε μια ομάδα
+							<p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer ">
+				<br>
+				<hr>
+				<div class="stats">
+					<br>
+					<div class="text-center">
+						<a href={% url 'createam' %}><button type="sumbit" class="btn btn-fill">Δημιουργια ομαδας</button></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6 col-md-6 col-sm-12">
+		<div class="card card-stats">
+			<div class="card-body ">
+				<div class="row">
+					<div class="col-5 col-md-4">
+						<div class="icon-big text-center icon-warning">
+							<i class="fas fa-sign-in-alt danger" style="color: #d03636;"></i>
+						</div>
+					</div>
+					<div class="col-7 col-md-8">
+						<div class="numbers">
+							<p class="card-title text-secondary">Eγγραφείτε σε μια ομάδα<br> ή group με κωδικό
+							<p>
+						</div>
+					</div>
+				</div>
+				<div class="card-footer ">
+					<hr>
+					<div class="stats">
+						<form method="post">
+							{% csrf_token %}
+							<input type="text" class="form-control border-input" id="code" name="code" placeholder="Καταχωρήστε κωδικό">
+							<br>
+							<div class="text-center">
+								<button type="sumbit" class="btn btn-fill" href="#">Συμμετοχη</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>
+	</div>
+	<div class="mx-auto">
+		<p style="color:red;"><b>{{err}}</b></p>
+	</div>
+	<div class="col-lg-12 col-md-6 col-sm-12">
+	<br><hr>
+		<h5>Αναζήτηση ομάδας με όνομα</h5>
+		<form class="navbar-form " id="groupsearch" courses-url="{% url 'groupsearch' %}">
+			<input class="custom-select custom-select-lg mb-3 bg-light border-dark " name="course" id="course" style="font-family: 'Roboto Slab', serif" placeholder="Όνομα ομάδας">
+		</form>
+	</div>
+	<div class="input-field col s12" id="id_course">
+		<div id="loadingSettings" class="spinner-border hideLoadSettings" role="status">
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+{% block scripts%}
+<script>
+	$("#course").keyup(function () {
+		$("#loadingSettings").toggleClass("hideLoadSettings");
+	    var url = $("#groupsearch").attr("courses-url"); 
+	    var searched = $(this).val();  
+	    
+	    $.ajax({                  
+	        url: url,                   
+	        data: {
+	            'searched': searched
+	        },
+	        success: function (data) {   
+	            $("#id_course").html(data);  
+	        }
+	  });
+	
+	});
+</script>
+{% endblock scripts%}

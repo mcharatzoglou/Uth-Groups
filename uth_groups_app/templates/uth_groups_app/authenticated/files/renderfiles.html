@@ -1,0 +1,145 @@
+{%load static%}
+	<style>
+	.table tr {
+    cursor: pointer;
+	}
+  .hideLoad{
+    display:None;
+  }
+	</style>
+<div id="rendered_folder">
+<div class="row">
+    <div class="col-md-5">
+      <fieldset name="Multiple Files Upload">
+        {% if msg %} {% autoescape off %} {{ msg }} {% endautoescape %} {% endif %}
+        <form id="fileUpload" method="post" action="{% url 'upload_file' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="text" name="current_folder_id" value="{{folder_id}}" hidden>
+          <button type="submit"><i class="fas fa-upload"></i></button>
+          <input id="file-input" type="file" name="files" multiple="" required="" >
+        </form>
+      </fieldset>
+    </div>
+    <div class="col-md-6">
+    <fieldset name="Multiple Files Upload">
+        {% if msg %} {% autoescape off %} {{ msg }} {% endautoescape %} {% endif %}
+        <form id="createFolder" method="post" action="{% url 'create_folder' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="text" name="current_folder_id" value="{{folder_id}}" hidden>
+          <button type="submit"><i class="fas fa-folder-plus"> </i> </button>
+          <input id="folderName" type="text" name="folderName" placeholder="Δημιουργία Φακέλου.." required>
+        </form>
+      </div>
+    </fieldset>
+</div>
+<br>
+<div class="d-flex justify-content-center">
+  <div id="loading" class="spinner-border hideLoad" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+{% if parent_folder != None %}
+  <a href="#"><i  id="back_folder" data-value={{parent_folder}} folder-url="{% url 'renderfolder' %}" onclick="back()" class="fas fa-arrow-circle-left fa-2x"></i></a>
+{% endif %}
+{% if user_folder_data|length != 0%}
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">τυπος</th>
+      <th scope="col">oνομα</th>
+      <th scope="col">Τελευταια τροποποιηση</th>
+      <th scope="col"> Διαγραφη </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for file in user_folder_data%}
+        {% if file.svg == "blank.svg" or file.svg != "folder.svg"%}
+        <tr>
+        <td onclick="window.open('{{file.webViewLink}}');"><img src ="{{file.iconLink}}" width="25vh"></td>
+        <td onclick="window.open('{{file.webViewLink}}');">{{file.name}}</td>
+        <td onclick="window.open('{{file.webViewLink}}');">{{file.modifiedTime}}<br><b>{{file.lastModifyingUser.displayName}}<b></td>
+        <td id="delete-{{file.id}}" owner-email="{{file.owners.0.emailAddress}}" class="table-danger" data-value={{file.id}} delete-file-folder-url="{% url 'deletefilefolder' %}" onclick="deletef('{{file.id}}')"><div class="col-xs-1" align="center"><i class="far fa-trash-alt"></i></div></td>
+        </tr>
+        {%else%}
+        <tr>
+        <td id="{{file.id}}" data-value={{file.id}} folder-url="{% url 'renderfolder' %}" onclick="front('{{file.id}}')"><img src ="{{file.iconLink}}" width="25vh"></td>
+        <td id="{{file.id}}" data-value={{file.id}} folder-url="{% url 'renderfolder' %}" onclick="front('{{file.id}}')">{{file.name}}</td>
+        <td id="{{file.id}}" data-value={{file.id}} folder-url="{% url 'renderfolder' %}" onclick="front('{{file.id}}')">{{file.modifiedTime}}<br><b>{{file.lastModifyingUser.displayName}}<b></td>
+        <td id="delete-{{file.id}}" owner-email="{{file.owners.0.emailAddress}}" class="table-danger" data-value={{file.id}} delete-file-folder-url="{% url 'deletefilefolder' %}" onclick="deletef('{{file.id}}')"><div align="center"><i class="far fa-trash-alt"></i></div></td>
+        
+        </tr>
+        {%endif%}
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<hr>
+<div class="col-md-3 mx-auto">
+  <b><p>Δεν υπάρχουν αρχέια.</p></b>
+</div>
+{% endif %}
+</div>
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+	$('#fileUpload').submit(function() {
+    $("#loading").toggleClass("hideLoad");
+		var data = new FormData(document.getElementById("fileUpload"));
+		$.ajax({
+			data: data,
+			type: $(this).attr('method'),
+			url: $(this).attr('action'),
+			cache: false,
+   			processData: false,
+    		contentType: false,
+			success: function(data) {
+				$('#rendered_folder').html(data);
+			}
+		});
+		return false;
+	});
+});
+
+$(document).ready(function() {
+	$('#createFolder').submit(function() {
+    $("#loading").toggleClass("hideLoad");
+		var data = new FormData(document.getElementById("createFolder"));
+		$.ajax({
+			data: data,
+			type: $(this).attr('method'),
+			url: $(this).attr('action'),
+      cache: false,
+   			processData: false,
+    		contentType: false,
+			success: function(data) {
+				$('#rendered_folder').html(data);
+			}
+		});
+		return false;
+	});
+});
+
+function deletef(filefolderid){
+	  $("#loading").toggleClass("hideLoad");
+	  id = "#delete-" + filefolderid
+	  var url = $(id).attr("delete-file-folder-url");
+	  var owner_email = $(id).attr("owner-email");
+	  var folder_id = "{{folder_id}}";
+	  
+      $.ajax({
+        url: url,                   
+	      data: {
+			  'owner_email':owner_email,
+	          'filefolder_id': filefolderid,
+			  'folder_id':folder_id
+	      },
+	      success: function (data) {   
+	          $("#rendered_folder").html(data);  
+	      }
+	    });
+}
+</script>
+{% endblock scripts %}
+
+

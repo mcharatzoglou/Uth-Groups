@@ -1,0 +1,260 @@
+{% extends 'uth_groups_app/authenticated/groups/groupsPage_main.html' %}
+{%load static%}
+{% block head %}
+<title>
+	{{current_group}} · Uth Groups
+</title>
+{% endblock %}
+{% load account %}
+{% block page_title %}
+{% if current_group.private == False %}
+	<a class="navbar-brand" href="{% url 'dashboard' %}"><i class="fas fa-chevron-circle-left "></i> </a><a class="navbar-brand">{{current_group}}</a>  
+{% else %}
+	<a class="navbar-brand" href="{% url 'dashboard' %}"><i class="fas fa-chevron-circle-left "></i> </a><a class="navbar-brand">{{current_group}} <i class="fas fa-lock"></i></a>  
+{% endif%}
+{% endblock %}
+{% block navitem%}
+<li class="nav-item">
+
+</li>
+{% endblock%}
+{% block groupcontent%}
+<div class="row">
+	<div class="col-md-10">
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item" role="presentation">
+				<a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true"><b>Δημοσιέυσεις</b></a>
+			</li>
+			<li class="nav-item" role="presentation">
+				<a class="nav-link" id="files-tab" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false"><b>Αρχεία</b></a>
+			</li>
+			<li class="nav-item" role="presentation">
+				<a class="nav-link" id="calendar-tab" data-toggle="tab" href="#calendar" role="tab" aria-controls="calendar" aria-selected="false"><b>Ημερολόγιο</b></a>
+			</li>
+			<li class="nav-item" role="presentation">
+				<a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false"><b>Επιλογές</b></a>
+			</li>
+		</ul>
+	</div>
+	<div class="col-md-2">
+		{% if owner.user == user or current_student in admins%}
+			<a href={% url 'new_meet' course.id current_group.id %}><button type="button" class="btn btn-block btn-secondary"><i style="margin-right: 1%;" class="fas fa-video"> </i>  ΝΕΑ ΣΥΝΑΝΤΗΣΗ </button></a>
+		{%endif%}
+	</div>
+</div>
+<div class="tab-content" id="myTabContent">
+	<div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+		<div class="row">
+			<div class="col-md-10">
+				<div class="card card-plain">
+					<div class="card-header">
+						<h4 class="card-title">Δημοσιέυσεις</h4>
+						<hr>
+						<div id="chat" style="overflow:auto;height:60vh;">
+							{% include "uth_groups_app/authenticated/groups/renderchat.html" %}
+						</div>
+						<hr>
+						<form id="sendMessage" method="post" action="{% url 'send_message' %}">
+							{% csrf_token %}
+							<input type="hidden" id="group_pk" name="group_pk" value={{current_group.pk}}>
+							<div class="row">
+								<div class="col-md-10 form-group">
+									<textarea class="form-control" id="message" name="message" rows="2" placeholder="Ξεκινήστε μια σηζήτηση" required></textarea>
+								</div>
+								<div class="col-md-2">
+									<button id="ChatSubmitButton" type="submit" class="btn btn-block btn-outline-secondary"><i class="fas fa-paper-plane fa-2x"></i></button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2" style="border-left:1px solid #000;">
+				<div>
+					<div class="card card-plain">
+						<div class="card-header">
+							<h4 class="card-title">Μέλη</h4>
+							{% if owner != None %}
+							<p class="card-category"><img src="{{ owner.user.socialaccount_set.all.0.get_avatar_url }}" width="30" height="30" class="rounded-circle"/> <b>{{owner}} (Διαχειριστής)</b></p>
+							{% endif %}
+							{% for member in participants%}
+							<p class="card-category"><img src="{{ member.user.socialaccount_set.all.0.get_avatar_url }}" width="30" height="30" class="rounded-circle"/> {{member}}</p>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab">
+		<div class="row">
+			<div class="col-md-12">
+				<div>
+					<div class="card card-plain">
+						<div class="card-header">
+							<h4 class="card-title">Αρχεία</h4>
+							<div class="basic">
+								{% include "uth_groups_app/authenticated/files/renderfiles.html" %}    
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="calendar" role="tabpanel" aria-labelledby="calendar-tab">
+		<h4 class="card-title">Σήμερα</h4>
+		{% if not event_list_today%}
+			Δεν υπάρχουν συνεδρίες για σημερα.
+		{% endif %}
+		{% for event in event_list_today%}
+			<a href="{{event.hangoutLink}}" target="_blank" >
+				<div style="background-color:#6b0606;"class="alert" role="alert">
+					{{event.summary}}
+					<div class="float-right">
+						{{event.start}} - {{event.end}}
+					</div>
+				</div>
+			</a>
+		{% endfor %}
+		<hr>
+		<h4 class="card-title">Επόμενες μέρες</h4>
+		{% if not event_list_other%}
+			Δεν υπάρχουν συνεδρίες για τις επόμενες μέρες.
+		{% endif %}
+		{% for event in event_list_other%}
+			<a href="{{event.hangoutLink}}" target="_blank" >
+				<div style="background-color:#8c8787;"class="alert" role="alert">
+					{{event.summary}}
+					<div class="float-right">
+						{{event.start}} - {{event.end}}
+					</div>
+				</div>
+			</a>
+		{% endfor %}
+	</div>
+	<div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+		<h4>Επιλογές</h4>
+		<br>
+		{% if owner.user == user or current_student in admins%}
+			<div class="custom-control custom-switch">
+				<form id="private" data-value={{current_group.pk}} private-url="{% url 'private' %}">
+					{% if current_group.private == False %}
+						<input type="checkbox" class="custom-control-input" id="private_checkbox">
+					{% else %}
+						<input type="checkbox" class="custom-control-input" id="private_checkbox" checked>
+					{% endif %}
+					<label class="custom-control-label" for="private_checkbox"><b>Ιδιωτικό group</b> - Εσείς διαλέγεται ποιός μπορεί να μπεί στo Group.
+					Στην καρτέλα "Επιλογές" μπορείτε να διαχειριστείτε τις αιτήσεις άλλων χρηστών προς τo group σας.</label>
+				</form>
+			</div>
+			<br><br><hr>
+			<h4>Διαχείρηση Μελών</h4>
+			<div class="col-md-12 mx-auto">
+				{% include "uth_groups_app/authenticated/groups/member_group_changes.html" %}
+			</div>
+			<br><br><hr>
+			<h4>Κωδικός Συμμετοχής</h4>
+			<div class="col-md-6 mx-auto">
+				{% include "uth_groups_app/authenticated/groups/group_changes.html" %}
+			</div>
+			<br><hr>
+		{% endif %}
+		<form method='POST' id="remove_group">
+			{% csrf_token %}
+			<div class="col-md-2 mx-auto">
+				<input type='hidden' value='key_detection' name='key_detection'>
+				{% if owner == current_student %}
+				<button type="submit" class="btn btn-danger btn-fill btn-sm btn-block">ΔΙΑΓΡΑΦΗ GROUP</button>
+				{% else %}
+				<button type="submit" class="btn btn-danger btn-fill btn-sm btn-block">ΑΠΕΓΓΡΑΦΗ ΑΠΟ ΤΟ GROUP</button>
+				{% endif %}
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock groupcontent%}
+
+{% block scripts%}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+<script>
+function front(folderid){
+	  $("#loading").toggleClass("hideLoad");
+	  id = "#" + folderid
+	  var url = $(id).attr("folder-url"); 
+	  var folder_id = folderid;
+
+      $.ajax({
+        url: url,                   
+	      data: {
+	          'folder_id': folder_id
+	      },
+	      success: function (data) {   
+	          $("#rendered_folder").html(data);  
+	      }
+	    });
+    
+	
+}
+function back(){
+	  $("#loading").toggleClass("hideLoad");
+	  var url = $("#back_folder").attr("folder-url"); 
+      var folder_id = $("#back_folder").data("value");
+	  
+
+      $.ajax({
+        url: url,                   
+	      data: {
+	          'folder_id': folder_id
+	      },
+	      success: function (data) {   
+	          $("#rendered_folder").html(data);  
+	      }
+	    });
+}
+
+$('#chat').scrollTop($('#chat')[0].scrollHeight);
+
+$(document).ready(function() {
+	$('#sendMessage').submit(function() {
+		var data = new FormData(document.getElementById("sendMessage"));
+		$.ajax({
+			data: data,
+			type: $(this).attr('method'),
+			url: $(this).attr('action'),
+      		cache: false,
+   				processData: false,
+    			contentType: false,
+			success: function(data) {
+				$('#chat').html(data);
+			}
+		});
+		return false;
+	});
+});
+
+function refreshChat() {
+	$.ajax({
+		data: {
+			'group_pk':"{{current_group.pk}}",
+		},
+		url: "{% url 'refresh_chat' %}",
+		success: function(data) {
+			$('#chat').html(data);
+		},
+		complete: function() {
+      		setTimeout(refreshChat, 1000);
+    	}
+	});
+	return false;
+}
+setTimeout(refreshChat, 1);
+</script>
+
+{% endblock scripts%}

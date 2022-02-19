@@ -1,0 +1,97 @@
+{% extends 'uth_groups_app/authenticated/authed_main.html' %}
+{%load static%}
+{% block head %}
+<title>
+	Ομάδες · Uth Groups
+</title>
+{% endblock %}
+{% load account %}
+{% block selected_tab %}
+<ul class="nav">
+	<li class="active">
+		<a href={% url 'dashboard' %}>
+		<i class="fas fa-users"></i>
+		<p>Οι Ομαδες μου</p>
+		</a>
+	</li>
+	<li>
+		<a href={% url 'add' %}>
+		<i class="fas fa-plus-circle"></i>
+		<p>Νεα ομαδα</p>
+		</a>
+	</li>
+	<li>
+		<a href={% url 'calendar' %}>
+		<i class="far fa-calendar-alt"></i>
+		<p>Ημερολoγιο</p>
+		</a>
+	</li>
+	<li>
+		<a href={% url 'profile' %}>
+		<i class="far fa-user-circle"></i>
+		<p>Προφιλ</p>
+		</a>
+	</li>
+</ul>
+{% endblock  %}
+{% block page_title %}
+<a class="navbar-brand">Οι Ομάδες μου</a>  
+{% endblock %}
+{% block content %}
+<div class="content">
+	<div class="row">
+		{% if myteams|length > 0 %}
+		{% for course in myteams%}
+		<div class="col-lg-6 col-md-6 col-sm-12">
+			<div class="card card-stats">
+				<div class="card-body ">
+					<a href="{% url 'coursePage' course.id %}">
+						<div class="row">
+							<div class="col-5 col-md-4">
+								<div class="icon-big text-center icon-warning">
+									<img src="{% static 'landing/images/app-promo/uth-logo-small.svg' %}">
+								</div>
+							</div>
+							<div class="col-7 col-md-8">
+								<div class="numbers">
+									{% if course.private == False %}
+										<p class="card-title text-secondary">{{course}}</p>
+									{% else %}
+										<p class="card-title text-secondary">{{course}} <i class="fas fa-lock"></i></p>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+				</div>
+				</a>
+				<div class="card-footer ">
+					<hr>
+					<div class="stats">
+						<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-cogs"></i>
+						Επιλογές
+						</a>
+						<div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink">
+							<form method='POST' id="remove_from_group"  action="/course/{{course.id}}">
+								{% csrf_token %}
+								<input type='hidden' value='remove_course' name='remove_course'>
+								<button type="sumbit" class="dropdown-item" href="#">Διαγραφή Ομάδας</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		{% else %}
+		<div class="mx-auto" style="margin-top:10vh; margin-l">
+			<a href={% url 'add' %}>
+			<h3 class="text-dark">Εγγραφείτε ή δημιουργήστε ομάδες <i class="fas fa-plus-circle" style="color:red;"></i></h3>
+			</a>
+			{{file}}
+		</div>
+		{% endif  %}
+	</div>
+</div>
+</div>
+{% endblock content %}

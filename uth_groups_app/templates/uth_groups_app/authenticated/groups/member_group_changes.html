@@ -1,0 +1,180 @@
+{%load static%}
+	<style>
+	.table tr {
+    cursor: pointer;
+	}
+  .hideLoadSettings{
+    display:None;
+  }
+	</style>
+
+<div id="rendered_members">
+  <div id="loadingSettings" class="spinner-border hideLoadSettings" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+    <h4>Διαχειρηστές</h4>
+  {% if admins%}
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Ονομα χρηστη</th>
+          <th scope="col">Gmail</th>
+          <th scope="col">Ακαδημαϊκo Email</th>
+          <th scope="col">Ενεργεια</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for admin in admins%}
+        <tr>
+          <th scope="row"><img width="30" height="30" class="rounded-circle" src="{{ admin.user.socialaccount_set.all.0.get_avatar_url }}" alt="..."></th>
+          <td>{{admin}}</td>
+          <td>{{admin.user.email}}</td>
+          <td>{{admin.academic_email}}</td>
+          <td>
+            <a id="removeAdmin-{{admin.pk}}" data-value={{admin.pk}} group="{{current_group.pk}}" handle-remove-admin-request-url="{% url 'handle_remove_admin_request_group' %}" onclick="handleRemoveAdmin('{{admin.pk}}')"style="color:red;">Διαγραφή απο τους διαχειρηστές</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {%else%}
+  Δεν υπάρχουν διαχειρηστές
+  {% endif %}
+  <h4>Μέλη</h4>
+  {% if participants %}
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Ονομα χρηστη</th>
+          <th scope="col">Gmail</th>
+          <th scope="col">Ακαδημαϊκo Email</th>
+          <th scope="col">Ενεργεια</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for member in participants%}
+        <tr>
+          <th scope="row"><img width="30" height="30" class="rounded-circle" src="{{ member.user.socialaccount_set.all.0.get_avatar_url }}" alt="..."></th>
+          <td>{{member}}</td>
+          <td>{{member.user.email}}</td>
+          <td>{{member.academic_email}}</td>
+          <td>
+            <a id="makeUserAdmin-{{member.pk}}" data-value={{member.pk}} group="{{current_group.pk}}" handle-make-user-admin-url="{% url 'handle_make_admin_user_group' %}" onclick="handleMakeAdminUser('{{member.pk}}')"style="color:green;">Διαχειριστής</a>
+            /
+            <a id="kickUser-{{member.pk}}" data-value={{member.pk}} group="{{current_group.pk}}" handle-kick-user-url="{% url 'handle_kick_user_group' %}" onclick="handleKickUser('{{member.pk}}')"style="color:red;">Διαγραφή</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {%else%}
+  Δεν υπάρχουν μέλη
+  {% endif %}
+
+  <h4>Αιτήματα</h4>
+  {% if join_requests%}
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Ονομα χρηστη</th>
+          <th scope="col">Gmail</th>
+          <th scope="col">Ακαδημαϊκo Email</th>
+          <th scope="col">Ενεργεια</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for requester in join_requests%}
+        <tr>
+          <th scope="row"><img width="30" height="30" class="rounded-circle" src="{{ requester.user.socialaccount_set.all.0.get_avatar_url }}" alt="..."></th>
+          <td>{{requester}}</td>
+          <td>{{requester.user.email}}</td>
+          <td>{{requester.academic_email}}</td>
+          <td>
+            <a id="joinRequest-{{requester.pk}}" data-value={{requester.pk}} group="{{current_group.pk}}" handle-join-request-url="{% url 'handle_join_request_group' %}" onclick="handleJoinRequest('{{requester.pk}}','Accept')"style="color:green;">Aποδοχή</a>
+            /
+            <a id="joinRequest-{{requester.pk}}" data-value={{requester.pk}} group="{{current_group.pk}}" handle-join-request-url="{% url 'handle_join_request_group' %}" onclick="handleJoinRequest('{{requester.pk}}','Decline')"style="color:red;">Απόρριψη</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {%else%}
+  Δεν υπάρχουν αιτήματα
+  {% endif %}
+</div>
+
+{%block scripts%}
+<script>
+function handleJoinRequest(requester_id,status){
+    $("#loadingSettings").toggleClass("hideLoadSettings");
+	  id = "#joinRequest-" + requester_id
+	  var url = $(id).attr("handle-join-request-url");
+	  var group = $(id).attr("group");
+      $.ajax({
+        url: url,                   
+	      data: {
+            'status':status,
+            'requester_id': requester_id,
+            'group':group
+	      },
+	      success: function (data) {   
+	          $("#rendered_members").html(data);  
+	      }
+	    });
+}
+
+function handleKickUser(requester_id){
+    $("#loadingSettings").toggleClass("hideLoadSettings");
+	  id = "#kickUser-" + requester_id
+	  var url = $(id).attr("handle-kick-user-url");
+	  var group = $(id).attr("group");
+      $.ajax({
+        url: url,                   
+	      data: {
+            'requester_id': requester_id,
+            'group':group
+	      },
+	      success: function (data) {   
+	          $("#rendered_members").html(data);  
+	      }
+	    });
+}
+
+function handleRemoveAdmin(requester_id){
+    $("#loadingSettings").toggleClass("hideLoadSettings");
+	  id = "#removeAdmin-" + requester_id
+	  var url = $(id).attr("handle-remove-admin-request-url");
+	  var group = $(id).attr("group");
+      $.ajax({
+        url: url,                   
+	      data: {
+	      'requester_id': requester_id,
+        'group':group
+	      },
+	      success: function (data) {   
+	          $("#rendered_members").html(data);  
+	      }
+	    });
+}
+
+function handleMakeAdminUser(requester_id){
+    $("#loadingSettings").toggleClass("hideLoadSettings");
+	  id = "#makeUserAdmin-" + requester_id
+	  var url = $(id).attr("handle-make-user-admin-url");
+	  var group = $(id).attr("group");
+      $.ajax({
+        url: url,                   
+	      data: {
+	      'requester_id': requester_id,
+        'group':group
+	      },
+	      success: function (data) {   
+	          $("#rendered_members").html(data);  
+	      }
+	    });
+}
+</script>
+{% endblock scripts%}

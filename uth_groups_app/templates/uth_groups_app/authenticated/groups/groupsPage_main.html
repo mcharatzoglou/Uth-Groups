@@ -1,0 +1,17 @@
+{% extends 'uth_groups_app/authenticated/groups/groups_navbar.html' %}
+{%load static%}
+{% block head %}
+<title>
+	{{current_group}} · Uth Groups
+</title>
+{% endblock %}
+{% load account %}
+{% block page_title %}
+<a class="navbar-brand">{{current_group}}</a>  
+{% endblock %}
+{% block content %}
+<div class="content">
+	{% block groupcontent%}
+	{% endblock%}
+</div>
+{% endblock content %}

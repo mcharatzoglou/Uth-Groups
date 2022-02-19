@@ -1,0 +1,49 @@
+{% extends 'uth_groups_app/authenticated/authed_main.html' %}
+{%load static%}
+{% block head %}
+<title>
+	{{course}} · Uth Groups
+</title>
+{% endblock %}
+{% load account %}
+{% block selected_tab %}
+<ul class="nav">
+	{% if selected_tab == -2%}
+	<li class="active">
+		{% else %}
+	<li>
+		{% endif %}
+
+		{% block newgroup %}
+		<a href={% url 'creategroup' course.id %}>
+		<button type="button" class="btn btn-danger btn-sm">Νεο group</button>
+		</a>
+		{% endblock %}
+	</li>
+	{% if selected_tab == -1%}
+	<li class="active">
+		{% else %}
+	<li>
+		{% endif %}
+		<a href="{% url 'coursePage' course.id %}">
+			<i class="nc-icon nc-bank"></i>
+			<p>Γενικο</p>
+		</a>
+	</li>
+	{% for group in mygroups%}
+	{% if selected_tab == group.id%}
+	<li class="active">
+		{% else %}
+	<li>
+		{% endif %}
+		<a href="{% url 'groupPage' course.id group.id %}">
+			{% if group.private%}
+			<p>{{group}} <i class="fas fa-user-lock"></i></p>
+			{% else %}
+			<p>{{group}} <i class="fas fa-user-friends"></i></p>
+			{% endif%}
+		</a>
+	</li>
+	{%endfor%}
+</ul>
+{% endblock  %}

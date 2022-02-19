@@ -1,0 +1,108 @@
+		<div id="change_render">
+			{% if current_group.code == None %}
+				<div class="d-flex justify-content-center">
+					<b><p>Δημιουργίστε έναν κωδικό συμμετοχής για το group σας. <br>Οποιοδσήποτε έχει τον κωδικό συμμετοχής μπορεί να μπει στo group σας.</p></b>
+				</div>
+				<div class="d-flex justify-content-center">
+					<form id="create_code_form" data-value={{current_group.pk}} create-code-form-url="{% url 'create_code' %}">
+						<a id="create_code" class="btn btn-light btn-sm" style="color:white;">Δημιουργια Κωδικου</a>
+					</form>
+				</div>
+			{% else %}
+				<div class="d-flex justify-content-center">
+					<b><p>Οποιοδσήποτε έχει τον κωδικό συμμετοχής μπορεί να μπει στο group σας.</p></b>
+				</div>
+				<div class="d-flex justify-content-center">
+					<input type="text" class="form-control" value={{current_group.code}} id="myInput" name="myInput" readonly="readonly">
+					<form id="refresh_code_form" data-value={{current_group.pk}} refresh-code-form-url="{% url 'create_code' %}">
+						<a id="refresh_code" class="btn btn-light btn-sm" style="color:white;">Ανανεωση κωδικου</a>
+					</form>			
+				</div>
+				<div class="d-flex justify-content-center">
+					<form id="delete_code_form" data-value={{current_group.pk}} delete-code-form-url="{% url 'delete_code' %}">
+                        <div class="d-flex">
+                            <div class="p-2"><a href="#" onclick="copy_code()"><b>Αντιγραφή Κωδικού</b></a></div>
+						    <div class="ml-auto p-2"><a id="delete_code" href="#"><b>Διαγραφη Κωδικου</b></a></div>
+                        </div>
+					</form>
+				</div>
+			{% endif %}
+		</div>
+
+{% block scripts%}
+<script>
+$("#private_checkbox").change(function () {
+	var url = $("#private").attr("private-url"); 
+	var group_id = $("#private").data("value"); 
+	    
+	$.ajax({                  
+	    url: url,                   
+	    data: {
+	        'group_id': group_id
+	    }
+	});
+	
+});
+
+$("#create_code").click(function () {
+	var url = $("#create_code_form").attr("create-code-form-url"); 
+	var group_id = $("#create_code_form").data("value"); 
+	    
+	$.ajax({                  
+	    url: url,                   
+	    data: {
+	        'group_id': group_id
+	    },
+	    success: function (data) {   
+	        $("#change_render").html(data);  
+	    }
+	});
+	
+});
+
+$("#refresh_code").click(function () {
+	var url = $("#refresh_code_form").attr("refresh-code-form-url"); 
+	var group_id = $("#refresh_code_form").data("value"); 
+	    
+	$.ajax({                  
+	    url: url,                   
+	    data: {
+	        'group_id': group_id
+	    },
+	    success: function (data) {   
+	        $("#change_render").html(data);  
+	    }
+	});
+	
+});
+
+$("#delete_code").click(function () {
+	var url = $("#delete_code_form").attr("delete-code-form-url"); 
+	var group_id = $("#delete_code_form").data("value"); 
+	    
+	$.ajax({                  
+	    url: url,                   
+	    data: {
+	        'group_id': group_id
+	    },
+	    success: function (data) {   
+	        $("#change_render").html(data);  
+	    }
+	});
+	
+});
+
+function copy_code() {
+  /* Get the text field */
+  var copyText = document.getElementById("myInput");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+}
+</script>
+{% endblock %}

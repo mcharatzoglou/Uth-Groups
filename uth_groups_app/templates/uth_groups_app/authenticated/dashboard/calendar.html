@@ -1,0 +1,72 @@
+{% extends 'uth_groups_app/authenticated/authed_main.html' %}
+{%load static%}
+{% block head %}
+<title>
+	Ημερολόγιο · Uth Groups
+</title>
+{% endblock %}
+{% load account %}
+{% block selected_tab %}
+<ul class="nav">
+	<li>
+		<a href={% url 'dashboard' %}>
+		<i class="fas fa-users"></i>
+		<p>Οι Ομαδες μου</p>
+		</a>
+	</li>
+	<li>
+		<a href={% url 'add' %}>
+		<i class="fas fa-plus-circle"></i>
+		<p>Νεα ομαδα</p>
+		</a>
+	</li>
+	<li class="active" >
+		<a href={% url 'calendar' %}>
+		<i class="far fa-calendar-alt"></i>
+		<p>Ημερολoγιο</p>
+		</a>
+	</li>
+	<li >
+		<a href={% url 'profile' %}>
+		<i class="far fa-user-circle"></i>
+		<p>Προφιλ</p>
+		</a>
+	</li>
+</ul>
+{% endblock  %}
+{% block page_title %}
+<a class="navbar-brand">Ημερολόγιο</a>  
+{% endblock %}
+{% block content %}
+<div class="content">
+	<h4 class="card-title">Σήμερα</h4>
+	{% if not event_list_today%}
+		Δεν υπάρχουν συνεδρίες για σημερα.
+	{% endif %}
+	{% for event in event_list_today%}
+		<a href="{{event.hangoutLink}}" target="_blank" >
+			<div style="background-color:#6b0606;"class="alert" role="alert">
+				{{event.summary}}
+				<div class="float-right">
+					{{event.start}} - {{event.end}}
+				</div>
+			</div>
+		</a>
+	{% endfor %}
+	<hr>
+	<h4 class="card-title">Επόμενες μέρες</h4>
+	{% if not event_list_other%}
+		Δεν υπάρχουν συνεδρίες για τις επόμενες μέρες.
+	{% endif %}
+	{% for event in event_list_other%}
+		<a href="{{event.hangoutLink}}" target="_blank" >
+			<div style="background-color:#8c8787;"class="alert" role="alert">
+				{{event.summary}}
+				<div class="float-right">
+					{{event.start}} - {{event.end}}
+				</div>
+			</div>
+		</a>
+	{% endfor %}
+</div>
+{% endblock content %}

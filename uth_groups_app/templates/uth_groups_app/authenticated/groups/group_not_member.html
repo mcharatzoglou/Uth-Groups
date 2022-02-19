@@ -1,0 +1,78 @@
+{% extends 'uth_groups_app/authenticated/groups/groupsPage_main.html' %}
+{%load static%}
+{% load account %}
+{% block groupcontent%}
+<div class="row">
+	<div class="col-md-10">
+		<div class="card card-plain">
+			{% if current_group.private == True%}
+				{% if join_request_sended == False%}
+					<div class="card-header mx-auto mt-5">
+						<div class="mx-auto">
+							<form method='POST' id="join_group">
+								{% csrf_token %}
+								<input type='hidden' value='key_detection' name='key_detection'>
+								<input type='hidden' value='private_request' name='private_request'>
+								<button type="submit" class="btn btn-danger btn-lg btn-block ">Αιτημα για Συμμετοχη</button>
+							</form>
+						</div>
+						<hr>
+						<div class="mx-auto">
+							<p>Μπείτε στο group για να δείτε τα αρχεία και να αλληλεπιδράστε με τα μέλη του.<br>
+							To group ειναι ιδιωτικό , θα έχετε πρόσβαση στo group όταν γίνεται αποδεκτός απο τον διαχειριστή.</p>
+						</div>
+						<h5><b>{{error_message}}</b></h5>
+					</div>
+				{% else %}
+					<div class="card-header mx-auto mt-5">
+						<div class="mx-auto">
+							<form method='POST' id="join_group">
+								{% csrf_token %}
+								<input type='hidden' value='key_detection' name='key_detection'>
+								<input type='hidden' value='private_request' name='private_request'>
+								<button type="submit" class="btn btn-danger btn-lg btn-block " disabled>Αναμονη για αποδοχη αιτηματος</button>
+							</form>
+						</div>
+						<hr>
+						<div class="mx-auto">
+							<p>Μπείτε στο group για να δείτε τα αρχεία και να αλληλεπιδράστε με τα μέλη του.<br>
+							To group ειναι ιδιωτικό , θα έχετε πρόσβαση στo group όταν γίνεται αποδεκτός απο τον διαχειριστή.</p>
+						</div>
+						<h5><b>{{error_message}}</b></h5>
+					</div>
+				{%endif%}
+			{% else%}
+				<div class="card-header mx-auto mt-5">
+					<div class="mx-auto">
+						<form method='POST' id="join_group">
+							{% csrf_token %}
+							<input type='hidden' value='key_detection' name='key_detection'>
+							<button type="submit" class="btn btn-danger btn-lg btn-block ">Συμμετοχη</button>
+						</form>
+					</div>
+					<hr>
+					<div class="mx-auto">
+						<p>Μπείτε στο group για να δείτε τα αρχεία και να αλληλεπιδράστε με τα μέλη του.</p>
+					</div>
+					<h5><b>{{error_message}}</b></h5>
+				</div>
+			{% endif%}
+		</div>
+	</div>
+	<div class="col-md-2" style="border-left:1px solid #000;">
+		<div>
+			<div class="card card-plain">
+				<div class="card-header">
+					<h4 class="card-title">Μέλη</h4>
+					{% if owner != None %}
+					<p class="card-category"><img src="{{ owner.user.socialaccount_set.all.0.get_avatar_url }}" width="30" height="30" class="rounded-circle"/> <b>{{owner}} (Διαχειριστής)</b></p>
+					{% endif %}
+					{% for member in participants%}
+					<p class="card-category"><img src="{{ member.user.socialaccount_set.all.0.get_avatar_url }}" width="30" height="30" class="rounded-circle"/> {{member}}</p>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock groupcontent%}

@@ -1,0 +1,69 @@
+{% extends 'uth_groups_app/authenticated/groups/groups_navbar.html' %}
+{%load static%}
+{% block head %}
+<title>
+	Δημιουργία Group · Uth Groups
+</title>
+<style> 
+	textarea {
+	width: 100%;
+	height: 150px;
+	padding: 12px 20px;
+	box-sizing: border-box;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+	background-color: #f8f8f8;
+	border-color: black;
+	font-size: 16px;
+	}
+</style>
+{% endblock %}
+{% load account %}
+{% block page_title %}
+<a class="navbar-brand" href="{% url 'coursePage' course.id %}"><i class="fas fa-chevron-circle-left "></i> </a><a class="navbar-brand" href="javascript:;">Δημιουργία Group</a>  
+{% endblock %}
+{% block content %}
+<div class="content">
+<div class="row">
+	<div class="col-md-7 order-md-4 mx-auto">
+		<h5><b>{{error_message}}</b></h5>
+		<h4 class="mb-3">Δημιουργία Group</h4>
+		<form method='POST'>
+			{% csrf_token %}
+			<div class="row" class="row" novalidate>
+				<div class="col-md-12 mb-3">
+					<label for="firstName">Ομάδα</label>
+					<input type="text" class="form-control" id="course_id" name="course_id" value="{{course.id}}" required disabled hidden>
+					<input type="text" class="form-control" id="course_display" placeholder={{course}} value="{{course}}" required disabled>
+				</div>
+				<div class="col-md-12 mb-3">
+					<label for="group_name">Όνομα Group</label>
+					<input type="text" class="form-control" id="group_name" name="group_name"placeholder="Όνομα Group ..." value="{{temp_groupname}}" required>
+					<div class="invalid-feedback">
+						Δώστε ένα όνομα για το Group.
+					</div>
+					<p style="color:red">{{message}}
+					<p>
+				</div>
+			</div>
+			<div class="mb-3">
+				<label for="description">Περιγραφή</label>
+				<textarea type="text" id="description" name="description" placeholder="Δώστε μια περιγραφή για τo Group ..." >{{temp_description}}</textarea>
+			</div>
+			<div class="mb-3">
+				<div class="custom-control custom-switch mx-auto">
+					<input type="checkbox" class="custom-control-input" id="private" name="private">
+					<label class="custom-control-label no-needs-validation" for="private"><b>Ιδιωτικό Group</b> - Εσείς διαλέγεται ποιός μπορεί να μπεί στo Group.
+					Στην καρτέλα "Επιλογές" μπορείτε να διαχειριστείτε τις αιτήσεις άλλων χρηστών προς τo group σας.</label>
+				</div>
+				<hr class="mb-4">
+				<button class="btn btn-light btn-block" type="submit">Δημιουργια</button>
+		</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+{% block scripts%}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="{% static 'authenticated/js/form-validation.js' %}"></script>
+{%endblock scripts%}

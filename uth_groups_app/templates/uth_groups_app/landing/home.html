@@ -1,0 +1,135 @@
+{% load static %}
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<link rel="icon" type="image/svg+xml" href="{% static 'landing/images/app-promo/uth-logo-small.svg' %}">
+		<title>Uth Groups</title>
+		<meta name="description" content="Μια πλατφόρμα αλληλοδιδασκαλίας μεταξύ φοιτητών">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- CSS Dependencies -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+		<link rel="stylesheet" href="{% static 'landing/css/shards.min.css'%}">
+		<link rel="stylesheet" href="{% static 'landing/css/shards-extras.min.css'%}">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+		<style>
+			*{font-family: 'Roboto Slab', serif;}
+		</style>
+	</head>
+	<body class="shards-app-promo-page--1">
+		<style>
+			*{font-family: 'Roboto Slab', serif;}
+		</style>
+		<!-- Welcome Section -->
+		<div class="welcome d-flex justify-content-center flex-column "style="height:100%">
+			<div class="container">
+				<!-- Navigation -->
+				<nav class="navbar navbar-expand-lg navbar-dark pt-4 px-0">
+					<a class="navbar-brand mr-5" href='{% url "home" %}' style="font-family: 'Roboto Slab', serif;">
+					<img src="{% static 'landing/images/app-promo/uth-logo-small.svg'%}" class="mr-0" alt="UTH Groups - Landing Page">
+					UTH GROUPS
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarNavDropdown">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item">
+								<a style="color:white;" class="nav-link" href="#app-features">Υπηρεσίες</a>
+							</li>
+							<li class="nav-item">
+								<a class="btn btn-danger" href="/accounts/google/login/?process=login"><b>Είσοδος</b></a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+				<!-- / Navigation -->
+			</div>
+			<!-- .container -->
+			<style>
+				*{font-family: 'Roboto Slab', serif;}
+			</style>
+			<!-- Inner Wrapper -->
+			<div class="inner-wrapper mt-auto mb-auto container">
+				<div class="row">
+					<div class="col-lg-9 col-md-10 col-sm-3 mt-auto mb-auto mr-3" >
+						<h1 class="welcome-heading display-4 text-white" style="font-family: 'Roboto Slab', serif;">Σύσκεψη , συνεργασία και cloud σε ένα σημείο.</h1>
+						<p style="color:white;">To Uth Groups προσφέρει μια ολοκληρωμένη πλατφόρμα αναζήτησης και δημιουργίας <b>ακαδημαϊκών</b> ομάδων.</p>
+						<a href="/accounts/google/login/?process=login" class="btn btn-lg btn-danger btn-pill align-self-center"><i class="fas fa-university mr-2"></i><b>Ξεκίνα τώρα</b></a>
+						<div class="d-block mt-5">
+							<img class="w-24 mt-4" src="{% static 'landing/images/app-promo/powered_by_google_on_non_white.png'%}" alt="Powered by Google">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- / Inner Wrapper -->
+		</div>
+		<!-- / Welcome Section -->
+		</div>
+		<!-- Features Section -->
+		<div id="app-features" class="app-features section servicesbody">
+			<style>
+		body {
+		background-color: linear-gradient(112.5deg, rgba(232, 232, 232, 0.03) 0%, rgba(232, 232, 232, 0.03) 2%,rgba(231, 231, 231, 0.03) 2%, rgba(231, 231, 231, 0.03) 4%,rgba(231, 231, 231, 0.03) 4%, rgba(231, 231, 231, 0.03) 11%,rgba(2, 2, 2, 0.03) 11%, rgba(2, 2, 2, 0.03) 67%,rgba(231, 231, 231, 0.03) 67%, rgba(231, 231, 231, 0.03) 90%,rgba(111, 111, 111, 0.03) 90%, rgba(111, 111, 111, 0.03) 100%),linear-gradient(157.5deg, rgba(210, 210, 210, 0.03) 0%, rgba(210, 210, 210, 0.03) 17%,rgba(254, 254, 254, 0.03) 17%, rgba(254, 254, 254, 0.03) 18%,rgba(96, 96, 96, 0.03) 18%, rgba(96, 96, 96, 0.03) 44%,rgba(159, 159, 159, 0.03) 44%, rgba(159, 159, 159, 0.03) 70%,rgba(24, 24, 24, 0.03) 70%, rgba(24, 24, 24, 0.03) 82%,rgba(16, 16, 16, 0.03) 82%, rgba(16, 16, 16, 0.03) 100%),linear-gradient(22.5deg, rgba(47, 47, 47, 0.03) 0%, rgba(47, 47, 47, 0.03) 32%,rgba(124, 124, 124, 0.03) 32%, rgba(124, 124, 124, 0.03) 40%,rgba(200, 200, 200, 0.03) 40%, rgba(200, 200, 200, 0.03) 42%,rgba(16, 16, 16, 0.03) 42%, rgba(16, 16, 16, 0.03) 64%,rgba(243, 243, 243, 0.03) 64%, rgba(243, 243, 243, 0.03) 94%,rgba(93, 93, 93, 0.03) 94%, rgba(93, 93, 93, 0.03) 100%),linear-gradient(90deg, #ffffff,#ffffff);
+		}
+	</style>
+			<div class="container-fluid">
+				<div class="row">
+					<!-- App Features Wrapper -->
+					<div class="app-features-wrapper col-lg-4 col-md-6 col-sm-12 py-4 mx-auto">
+						<div class="container">
+							<h3 class="underline--left my-5" style="font-family: 'Roboto Slab', serif;">Υπηρεσίες</h3>
+							<div class="feature py-4 d-flex">
+								<div class="icon text-white bg-danger mr-5"><i class="fa fa-university" style="line-height: 2.4;"></i></div>
+								<div>
+									<h5 style="font-family: 'Roboto Slab', serif;">Ακαδημαϊκα Μέλη</h5>
+									<p>Όλα τα μέλη του Uth Groups ανήκουν στην ακαδημαϊκή κοινότητα .</p>
+								</div>
+							</div>
+							<div class="feature py-4 d-flex">
+								<div class="icon text-white bg-danger mr-5"><i class="fa fa-group" style="line-height: 2.4;"></i></div>
+								<div>
+									<h5 style="font-family: 'Roboto Slab', serif;">Ομάδες και Groups</h5>
+									<p>Βρές ή δημιουργίσε ομάδες και groups. Εντόπισε τους κατάλληλους φοιτητές που ταιρίαζουν με εσένα.</p>
+								</div>
+							</div>
+							<div class="feature py-4 d-flex">
+								<div class="icon text-white bg-danger mr-5"><i class="fa fa-google" style="line-height: 2.4;"></i></div>
+								<div>
+									<h5 style="font-family: 'Roboto Slab', serif;">Google Synced</h5>
+									<p>Οι ομάδες και τα group είναι εξοπλησμένα με υπηρεσίες της Google όπως το <b>Google Drive</b>, <b>Google Calendar</b> και <b>Google Meet.</b></p>
+								</div>
+							</div>
+							<div class="feature py-4 d-flex">
+								<div class="icon text-white bg-danger mr-5"><i class="fa fa-hands-helping" style="line-height: 2.4;"></i></div>
+								<div>
+									<h5 style="font-family: 'Roboto Slab', serif;">Από φοιτητές για φοιτητές</h5>
+									<p>Το Uth Groups είναι σχεδιασμένο απο φοιτητές για φοιτητές, γιαυτό γνωρίζουμε ακριβώς τις ανάγκες σου.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Footer Section -->
+		<footer>
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+				<div class="container">
+					<a class="navbar-brand" href="#"><img src="{% static 'landing/images/app-promo/uth-logo-small.svg' %}" alt=" UTH Groups - Landing Page" style="font-family: 'Roboto Slab', serif;"> UTH GROUPS</a>
+					<a style="color:white" href='https://www.uth.gr'>Πανεπιστήμιο Θεσσαλίας</a>
+					<a style="color:white" href={% url 'privacypolicy' %}>Privacy Policy</a>
+					<a style="color:white" href={% url 'about' %}>About</a>
+				</div>
+			</nav>
+		</footer>
+		<!-- / Footer Section -->
+		<!-- JavaScript Dependencies -->
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	</body>
+</html>

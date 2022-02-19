@@ -1,0 +1,26 @@
+{%for message in chat_messages%}
+	{% if message.student.user == request.user%}
+	<div class="float-right col-md-7">
+		<div class="alert" style="background-color:#6b0606"role="alert">
+			<img src="{{ message.student.user.socialaccount_set.all.0.get_avatar_url }}" width="30" height="30" class="rounded-circle"/> <b>{{message.student}} </b>
+			<div class="float-right">{{message.sended_at}}</div>
+			<br>
+			
+			{{message.message}}
+		</div>
+	</div>
+	{%else%}
+		<div class="float-left col-md-7">
+			<div class="alert" style="background-color:#919090"role="alert">
+				<img src="{{ message.student.user.socialaccount_set.all.0.get_avatar_url }}" width="30" height="30" class="rounded-circle"/> <b>{{message.student}} </b>
+				<div class="float-right">{{message.sended_at}}</div>
+				<br>
+				{{message.message}}
+			</div>
+		</div>
+	{% endif %}
+	<br><br><br><br>
+{%endfor%}
+<script>
+$('#chat').scrollTop($('#chat')[0].scrollHeight);
+</script>

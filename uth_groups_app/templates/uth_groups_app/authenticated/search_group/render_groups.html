@@ -1,0 +1,40 @@
+{% load static %}
+<div id="loadingSettings" class="spinner-border hideLoadSettings" role="status">
+	<span class="sr-only">Loading...</span>
+</div>
+{% if results.count > 0%}
+<div class="row">
+	{% for team in results%}
+	<a href="{% url 'coursePage' team.id %}">
+		<div class="col-lg-6 col-md-6 col-sm-6">
+			<div class="card card-stats" >
+				<div class="card-body ">
+					<div class="row">
+						<div class="col-5 col-md-4">
+							<div class="icon-big text-center icon-warning">
+								<img src="{% static 'landing/images/app-promo/uth-logo-small.svg' %}">
+							</div>
+						</div>
+						<div class="col-7 col-md-8">
+							<div class="numbers">
+								<p class="card-title">{{team}}
+								<p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-footer ">
+					<hr>
+					<div class="stats">
+						<i class="fa fa-clock"></i>
+						{{team.datetime}}
+					</div>
+				</div>
+			</div>
+	</a>
+	</div>
+	{% endfor %}
+</div>
+{% else %}
+Δεν βρέθηκαν ομάδες
+{% endif %}

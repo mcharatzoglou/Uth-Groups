@@ -1,0 +1,92 @@
+{% extends 'uth_groups_app/authenticated/authed_main.html' %}
+{%load static%}
+{% block head %}
+<title>
+	Δημιουργία Ομάδας · Uth Groups
+</title>
+<style> 
+	textarea {
+	width: 100%;
+	height: 150px;
+	padding: 12px 20px;
+	box-sizing: border-box;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+	background-color: #f8f8f8;
+	border-color: black;
+	font-size: 16px;
+	}
+</style>
+{% endblock %}
+{% load account %}
+{% block page_title %}
+<a class="navbar-brand" href="javascript:;">Δημιουργία Ομάδας</a>  
+{% endblock %}
+{% block selected_tab %}
+<ul class="nav">
+	<li>
+		<a href={% url 'dashboard' %}>
+		<i class="fas fa-users"></i>
+		<p>Οι Ομαδες μου</p>
+		</a>
+	</li>
+	<li class="active">
+		<a href={% url 'add' %}>
+		<i class="fas fa-plus-circle"></i>
+		<p>Νεα ομαδα</p>
+		</a>
+	</li>
+	<li>
+		<a href={% url 'calendar' %}>
+		<i class="far fa-calendar-alt"></i>
+		<p>Ημερολoγιο</p>
+		</a>
+	</li>
+	<li >
+		<a href={% url 'profile' %}>
+		<i class="far fa-user-circle"></i>
+		<p>Προφιλ</p>
+		</a>
+	</li>
+</ul>
+{% endblock  %}
+{% block content %}
+<div class="content">
+<div class="row">
+	<div class="col-md-7 order-md-4 mx-auto">
+		<h5><b>{{error_message}}</b></h5>
+		<h4 class="mb-3">Δημιουργία Ομάδας</h4>
+		<form method='POST'>
+			{% csrf_token %}
+			<div class="row" class="row" novalidate>
+				<div class="col-md-12 mb-3">
+					<label for="team_name">Όνομα Ομάδας</label>
+					<input type="text" class="form-control" id="team_name" name="team_name" placeholder="Όνομα Ομάδας ..." value="{{temp_teamname}}" required>
+					<div class="invalid-feedback">
+						Δώστε ένα όνομα για την ομάδα σας.
+					</div>
+					<p style="color:red">{{message}}
+					<p>
+				</div>
+			</div>
+			<div class="mb-3">
+				<label for="description">Περιγραφή</label>
+				<textarea type="text" id="description" name="description" placeholder="Δώστε μια περιγραφή για την ομάδα ..." >{{temp_team_description}}</textarea>
+			</div>
+			<div class="mb-3">
+				<div class="custom-control custom-switch mx-auto">
+					<input type="checkbox" class="custom-control-input" id="private" name="private">
+					<label class="custom-control-label no-needs-validation" for="private"><b>Ιδιωτική Ομάδα</b> - Εσείς διαλέγεται ποιός μπορεί να μπεί στην ομάδα.
+					Στην καρτέλα "Επιλογές" μπορείτε να διαχειριστείτε τις αιτήσεις άλλων χρηστών προς την ομάδα σας.</label>
+				</div>
+				<hr class="mb-4">
+				<button class="btn btn-light btn-block" type="submit">Δημιουργια</button>
+		</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+{% block scripts%}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="{% static 'authenticated/js/form-validation.js' %}"></script>
+{%endblock scripts%}

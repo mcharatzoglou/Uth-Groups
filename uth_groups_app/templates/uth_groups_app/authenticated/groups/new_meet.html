@@ -1,0 +1,133 @@
+{% extends 'uth_groups_app/authenticated/groups/groups_navbar.html' %}
+{%load static%}
+{% block head %}
+<title>
+	Νέα Συνάντηση · Uth Groups
+</title>
+<style> 
+	textarea {
+	width: 100%;
+	height: 150px;
+	padding: 12px 20px;
+	box-sizing: border-box;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+	background-color: #f8f8f8;
+	border-color: black;
+	font-size: 16px;
+	}
+</style>
+{% endblock %}
+{% load account %}
+{% block page_title %}
+{% if group != None %}
+<a class="navbar-brand" href="{% url 'groupPage' course.id group.id %}"><i class="fas fa-chevron-circle-left "></i> </a><a class="navbar-brand" href="javascript:;">Νέα Συνάντηση</a>  
+{% else %}
+<a class="navbar-brand" href="{% url 'coursePage' course.id %}"><i class="fas fa-chevron-circle-left "></i> </a><a class="navbar-brand" href="javascript:;">Νέα Συνάντηση</a>
+{% endif %}
+{% endblock %}
+{% block content %}
+<div class="content">
+<div class="row">
+	<div class="col-md-7 order-md-4 mx-auto">
+		{% for message in messages%}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<p style="color:red;"><b>{{message}}</b></p>
+			{% endif %}
+		{% endfor %}
+		
+		<h4 class="mb-3">Νέα Συνάντηση</h4>
+		<form method='POST'>
+			{% csrf_token %}
+			<div class="row" class="row" novalidate>
+				<div class="col-md-12 mb-3">
+					<label for="firstName">Ομάδα</label>
+					<input type="text" class="form-control" id="course_id" name="course_id" value="{{course.id}}" required disabled hidden>
+                    <input type="text" class="form-control" id="course_display" placeholder={{course}} value="{{course}}" required disabled>
+                    
+                    {% if group != None %}
+                        <br>
+                        <label for="firstName">Group</label>
+                        <input type="text" class="form-control" id="group_id" name="group_id" value="{{group.id}}" required disabled hidden>
+					    <input type="text" class="form-control" id="group_display" placeholder={{group}} value="{{group}}" required disabled>
+                    {% endif %}
+				</div>
+				<div class="col-md-12 mb-3">
+					<label for="meet_title">Όνομα συνάντησης</label>
+					<input type="text" class="form-control" id="meet_title" name="meet_title"placeholder="Όνομα συνάντησης" required>
+					<div class="invalid-feedback">
+						Δώστε έναν τίτλο για την συνάντηση σας.
+					</div>
+				</div>
+
+				<div class="col-md-12 mb-3">
+					<label for="meet_desc">Περιγραφή</label>
+					<textarea class="form-control" id="meet_desc" name="meet_desc" placeholder=" Περιγραφή" rows="4"></textarea>
+				</div>
+			</div>
+
+			<div class="mb-3 custom-control custom-switch mx-auto">
+                <input type="checkbox" class="custom-control-input" id="instantCall" name="instantCall">
+                <label class="custom-control-label no-needs-validation" for="instantCall"><b>Άμεση συνάντηση</b> - Η συνάντηση ξεκινάει τώρα.</label>
+            </div>
+
+			<hr>
+
+			<div id="datetime_meet">
+				<label for="group_name">Ημέρα και ώρα συνάντησης</label>
+				<div class="mb-3 d-flex justify-content-center">
+					<input class="form-control" type="datetime-local" id="start_datetime" name="start_datetime" required>
+					<h5> - </h5>
+					<input class="form-control" type="datetime-local" id="end_datetime" name="end_datetime" required>
+				</div>
+
+				<div class="form-group">
+					<label for="repeat_meet">Επανάληψη Συνάντησης</label>
+					<select class="form-control" id="repeat_meet" name="repeat_meet">
+					<option selected>Δεν Επαναλαμβάνεται</option>
+					<option value="DAILY">Καθημερινά</option>
+					<option value="WEEKLY">Εβδομαδιαία</option>
+					<option value="MONTHLY">Μηνιαία</option>
+					</select>
+				</div>
+				
+				<label for="repeat_times">Επανάληψη εώς</label>
+				<div class="mb-3 d-flex justify-content-center" id="repeat_times_div" name="repeat_times_div">
+					<input class="form-control" type="datetime-local" id="repeat_times" name="repeat_times" required disabled>
+				</div>
+			</div>
+			<hr>
+			<b>Όλα τα μέλη της ομάδας ή του group για την οποία δημιουργείται την συνάντηση θα προσκληθούν αυτόματα και θα ειδοποιηθούν με email πριν την συνάντηση. Μπορείτε να δείτε όλες τις συναντήσεις σας στην καρτέλα "Ημερολόγιο" όπως επίσης και στο Google Calendar σας.</b>
+			<hr>
+				<button class="btn btn-light btn-block" type="submit">Δημιουργια συναντησης</button>
+		</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+{% block scripts%}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="{% static 'authenticated/js/form-validation.js' %}"></script>
+<script>
+$("#instantCall").change(function () {
+	var insta_call = document.getElementById('instantCall');
+	if (insta_call.checked == true){
+		$("#datetime_meet *").prop('disabled',true);
+	}
+	else{
+		$("#datetime_meet *").prop('disabled',false);
+	}
+	
+});
+$("#repeat_meet").change(function () {
+	var repeat = document.getElementById('repeat_meet');
+	if (repeat.value == "Δεν Επαναλαμβάνεται"){
+		$("#repeat_times_div *").prop('disabled',true);
+	}
+	else{
+		$("#repeat_times_div *").prop('disabled',false);
+	}
+	
+});
+</script>
+{%endblock scripts%}
